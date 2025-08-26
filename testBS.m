@@ -10,6 +10,9 @@ S = [1 0; 0 i];
 %% Calculations
 ket0 = [1;0];
 ket1 = [0;1];
+ketp = (ket0 + ket1)/sqrt(2);%ket+
+ketm = (ket0 - ket1)/sqrt(2);%ket-
+
 
 rho = ket2dm(ket0);
 lambda0 = ket2bv(ket0);
@@ -23,7 +26,7 @@ plotBlochSphere;
 
 
 %plot value
-psi = ((1/(2^0.5)*ket0)+(1/(2^0.5)*ket1));%value
+psi = (ketp);%value
 
 
 
