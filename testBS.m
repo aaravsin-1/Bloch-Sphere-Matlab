@@ -27,14 +27,22 @@ figure;%opens a new figure each time -- can remove or comment out if not needed
 plotBlochSphere;
 
 %plot value
-psi = (H*ket0);%value
+psi = (T*ketp);%value
 
 %normalise then plot the vector
 newKet = psi ;
 newKet = newKet / norm(newKet);
-plotBlochVect(newKet);
+plotBlochVect(newKet,'r');
 %Dynamic Title
 title(ket2latex(newKet), 'Interpreter','latex','FontSize',16);
+
+%second qubit
+psi2 = (ketp);%value
+
+%normalise then plot the vector
+newKet = psi2 ;
+newKet = newKet / norm(newKet);
+plotBlochVect(newKet,'g');%vector,color
 
 
 
@@ -54,10 +62,10 @@ function lambda = ket2bv(ket)
                real(trace(Z*rho)) ];
 end
 
-function plotBlochVect(ket)
+function plotBlochVect(ket,col)
     lambda = ket2bv(ket);
     line([0 lambda(1)], [0 lambda(2)], [0 lambda(3)], ...
-        'LineWidth',3,'Marker','O','Color','r');
+        'LineWidth',3,'Marker','O','Color',col);
 end
 
 function label = ket2latex(psi)
