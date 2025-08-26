@@ -19,25 +19,28 @@ rho = ket2dm(ket0);
 lambda0 = ket2bv(ket0);
 lambda1 = ket2bv(ket1);
 
+
+
+
 % Plot Bloch sphere first
 figure;%opens a new figure each time -- can remove or comment out if not needed
 plotBlochSphere;
 
- 
 %plot value
 psi = (X*ket0);%value
-
-
-
 
 %normalise then plot the vector
 newKet = psi ;
 newKet = newKet / norm(newKet);
 plotBlochVect(newKet);
-
 %%Dynamic Title
-
 title(ket2latex(newKet), 'Interpreter','latex','FontSize',16);
+
+
+
+
+
+
 
 %% --- Helper functions ---
 function rho = ket2dm(ket)
@@ -63,65 +66,60 @@ function plotBlochVect(ket)
 end
 
 function label = ket2latex(psi)
-    % Round small numerical noise
-    psi = round(psi, 4);
-
-    % Coefficients
-    a = psi(1);
-    b = psi(2);
-
-    % Format real/imag parts nicely
+    psi = round(psi,4);
+    a = psi(1); b = psi(2);
+    
     a_str = complex2str(a, '|0\rangle');
     b_str = complex2str(b, '|1\rangle');
-
-    % Combine terms cleanly
+    
+    % Correctly handle signs
     if isempty(a_str)
         label = ['$\displaystyle |\psi\rangle = ' b_str '$'];
     elseif isempty(b_str)
         label = ['$\displaystyle |\psi\rangle = ' a_str '$'];
     else
-        label = ['$\displaystyle |\psi\rangle = ' a_str ' + ' b_str '$'];
+        if b(1) >= 0
+            label = ['$\displaystyle |\psi\rangle = ' a_str ' + ' b_str '$'];
+        else
+            label = ['$\displaystyle |\psi\rangle = ' a_str ' ' b_str '$']; % b_str already has minus sign
+        end
     end
 end
 
 function s = complex2str(c, ketLabel)
-    % Optional ketLabel argument for appending |0> or |1>
-    if nargin < 2, ketLabel = ''; end
-
-    % Handle 0
-    if abs(c) < 1e-10
-        s = '';
-        return
-    end
-
-    % Special fraction 1/sqrt(2)
-    if abs(abs(c) - 1/sqrt(2)) < 1e-6
-        if real(c) < 0
+    if nargin<2, ketLabel=''; end
+    
+    % Zero
+    if abs(c)<1e-10, s=''; return; end
+    
+    % 1/sqrt(2) special
+    if abs(abs(c)-1/sqrt(2))<1e-6
+        if real(c)<0
             s = ['-\frac{1}{\sqrt{2}}' ketLabel];
         else
             s = ['\frac{1}{\sqrt{2}}' ketLabel];
         end
         return
     end
-
-    % Handle real
-    if imag(c) == 0
-        if abs(c) == 1
+    
+    % Pure real
+    if imag(c)==0
+        if abs(c)==1
             s = [sign(c)*'' ketLabel];
         else
             s = [num2str(c) ketLabel];
         end
-    % Handle purely imaginary
-    elseif real(c) == 0
-        if imag(c) == 1
+    % Pure imaginary
+    elseif real(c)==0
+        if imag(c)==1
             s = ['i' ketLabel];
-        elseif imag(c) == -1
+        elseif imag(c)==-1
             s = ['-i' ketLabel];
         else
             s = [num2str(imag(c)) 'i' ketLabel];
         end
+    % General complex
     else
-        % General complex
         s = ['(' num2str(real(c)) '+' num2str(imag(c)) 'i)' ketLabel];
     end
 end
