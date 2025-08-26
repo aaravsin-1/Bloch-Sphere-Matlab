@@ -26,15 +26,17 @@ plotBlochSphere;
 
 
 %plot value
-psi = (ketp);%value
-
-
+psi = (ketm);%value
 
 
 %normalise then plot the vector
 newKet = psi ;
 newKet = newKet / norm(newKet);
 plotBlochVect(newKet);
+
+%%Dynamic Title
+
+title(ket2latex(newKet), 'Interpreter','latex','FontSize',16);
 
 %% --- Helper functions ---
 function rho = ket2dm(ket)
@@ -56,4 +58,48 @@ function plotBlochVect(ket)
     lambda = ket2bv(ket);
     line([0 lambda(1)], [0 lambda(2)], [0 lambda(3)], ...
         'LineWidth',3,'Marker','O','Color','r');
+end
+
+function label = ket2latex(psi)
+    % Round small numerical noise
+    psi = round(psi, 4);
+
+    % Coefficients
+    a = psi(1);
+    b = psi(2);
+
+    % Format real/imag parts nicely
+    a_str = complex2str(a);
+    b_str = complex2str(b);
+
+    % Build LaTeX ket expression
+    label = ['$|\psi\rangle = ' a_str '|0\rangle + ' b_str '|1\rangle$'];
+end
+
+function s = complex2str(c)
+    % Handle 0 specially
+    if abs(c) < 1e-10
+        s = '';
+        return
+    end
+    % If real
+    if imag(c) == 0
+        s = num2str(real(c));
+    % If purely imaginary
+    elseif real(c) == 0
+        if imag(c) == 1
+            s = 'i';
+        elseif imag(c) == -1
+            s = '-i';
+        else
+            s = [num2str(imag(c)) 'i'];
+        end
+    else
+        % General complex
+        s = ['(' num2str(real(c)) '+' num2str(imag(c)) 'i)'];
+    end
+    % Add sqrt(2) denominator if exact
+    if abs(abs(c) - 1/sqrt(2)) < 1e-6
+        s = ['\tfrac{1}{\sqrt{2}}' ];
+    end
 end
