@@ -20,3 +20,10 @@ State formatting in LaTeX
 ## Requirements
 MATLAB R2021a or later (tested)
 No toolboxes required - pure MATLAB code
+
+## Using
+
+in testBS.m
+change the value of psi as you want
+as well as add more qubit gates
+
