@@ -5,7 +5,7 @@ X = [0 1; 1 0];
 Z = [1 0; 0 -1];
 Y = [0 -1i; 1i 0];
 H = (1/sqrt(2)) * (X + Z);
-S = [1 0; 0 i];
+S = [1 0; 0 1i];
 T = [1 0;0 exp(1i*pi/4)];
 
 %% Calculations
@@ -22,22 +22,19 @@ lambda1 = ket2bv(ket1);
 
 
 
-% Plot Bloch sphere first
+%% Plot Bloch sphere first
 figure;%opens a new figure each time -- can remove or comment out if not needed
 plotBlochSphere;
 
 %plot value
-psi = (X*ket0);%value
+psi = (S*ket1);%value
 
 %normalise then plot the vector
 newKet = psi ;
 newKet = newKet / norm(newKet);
 plotBlochVect(newKet);
-%%Dynamic Title
+%Dynamic Title
 title(ket2latex(newKet), 'Interpreter','latex','FontSize',16);
-
-
-
 
 
 
@@ -52,8 +49,6 @@ function lambda = ket2bv(ket)
     X = [0 1; 1 0]; 
     Y = [0 -1i; 1i 0]; 
     Z = [1 0; 0 -1];
-    S = [1 0; 0 i];
-    T = [1 0;0 exp(1i*pi/4)];
     lambda = [ real(trace(X*rho)); 
                real(trace(Y*rho)); 
                real(trace(Z*rho)) ];
