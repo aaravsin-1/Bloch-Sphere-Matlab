@@ -91,7 +91,7 @@ function s = complex2str(c, ketLabel)
     end
 
     % Handle 1/sqrt(2)
-    if abs(abs(c) - 1/sqrt(2)) < 1e-3
+    if abs(abs(c) - 1/sqrt(2)) < 1e-5
         if real(c) < 0
             s = ['-\frac{1}{\sqrt{2}}' ketLabel];
         else
