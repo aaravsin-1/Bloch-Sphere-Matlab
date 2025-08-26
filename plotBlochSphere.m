@@ -26,15 +26,25 @@ text(0, 1.1, 0, '$|i\rangle$', 'Interpreter','latex', ...
 text(0, -1.1, 0, '$|-i\rangle$', 'Interpreter','latex', ...
     'FontSize', 20, 'HorizontalAlignment','center','Color','w')
 
-% Axes arrows
-quiver3(0,0,0, 1.2,0,0, 'w','LineWidth',1.5,'MaxHeadSize',0.3)
-quiver3(0,0,0, 0,1.2,0, 'w','LineWidth',1.5,'MaxHeadSize',0.3)
-quiver3(0,0,0, 0,0,1.2, 'w','LineWidth',1.5,'MaxHeadSize',0.3)
-
 % Axis labels
 text(1.3,0,0,'X','FontSize',14,'Color','w')
 text(0,1.3,0,'Y','FontSize',14,'Color','w')
 text(0,0,1.3,'Z','FontSize',14,'Color','w')
+
+ % --- New: Equatorial circles around X, Y, Z axes ---
+    t = linspace(0,2*pi,200);
+
+    % Circle in YZ plane (around X-axis)
+    plot3(zeros(size(t)), cos(t), sin(t), ...
+        'Color', [1 1 1 0.3], 'LineWidth', 1.2);  
+
+    % Circle in XZ plane (around Y-axis)
+    plot3(cos(t), zeros(size(t)), sin(t), ...
+        'Color', [1 1 1 0.3], 'LineWidth', 1.2);
+
+    % Circle in XY plane (around Z-axis)
+    plot3(cos(t), sin(t), zeros(size(t)), ...
+        'Color', [1 1 1 0.3], 'LineWidth', 1.2);
 
 % Set viewing angle
 view([60 15])

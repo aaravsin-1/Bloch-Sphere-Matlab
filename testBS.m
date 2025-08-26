@@ -23,7 +23,7 @@ plotBlochSphere;
 
 
 %plot value
-psi = (S*H*ket1);%value
+psi = ((1/(2^0.5)*ket0)+(1/(2^0.5)*ket1));%value
 
 
 
@@ -52,5 +52,5 @@ end
 function plotBlochVect(ket)
     lambda = ket2bv(ket);
     line([0 lambda(1)], [0 lambda(2)], [0 lambda(3)], ...
-        'LineWidth',2,'Marker','o','Color','r');
+        'LineWidth',3,'Marker','O','Color','r');
 end
