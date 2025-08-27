@@ -12,6 +12,9 @@ state = np.array([1+0j, 0+0j])   # start at |0>
 scene = canvas(title="✨ Bloch Sphere ✨",
                width=1100, height=750, background=vector(0.96,0.97,1))
 
+# Reorient so Z is up
+scene.up = vector(0,0,1)
+scene.forward = vector(0,1,0)
 # Lighting
 distant_light(direction=vector(1,2,3), color=color.white)
 local_light(pos=vector(2,2,2), color=color.gray(0.8))
@@ -53,7 +56,9 @@ state_arrow = arrow(pos=vector(0,0,0), axis=vector(0,0,1), shaftwidth=0.05,
                     color=vector(1,0.55,0.1), shininess=1, emissive=True)
 tip = sphere(pos=state_arrow.axis, radius=0.06, color=vector(1,0.55,0.1), emissive=True)
 
-# --- Trail system ---
+# -----------------------
+# Trail system
+# -----------------------
 trail_enabled = True
 trail = curve(radius=0.01, color=vector(1.0, 0.6, 0.2))  # manual trail curve
 
@@ -63,13 +68,15 @@ def update_trail():
         trail.append(pos=tip.pos)
 
 def toggle_trail(cb):
+    """Toggle trail drawing"""
     global trail_enabled
     trail_enabled = cb.checked
     if not trail_enabled:
         trail.clear()   # clears instantly when unchecked
 
 def clear_trail_btn(_=None):
-    trail.clear()       # manual clear button
+    """Clear trail via button"""
+    trail.clear()
 
 # Info panel
 info = wtext(text="<pre><b>State Info</b>\n</pre>")
@@ -116,17 +123,11 @@ def apply_gate(U):
     state = normalize(U @ state)
     update_visuals()
 
-# -----------------------
-# Trail controls
-# -----------------------
-def toggle_trail(cb):
-    global trail_enabled
-    trail_enabled = cb.checked
-    if not trail_enabled: tip.clear_trail()
-    else: attach_trail(tip, radius=0.01, color=TRAIL_COLOR, retain=TRAIL_RETAIN)
-
-def clear_trail_btn(_=None):
-    tip.clear_trail()
+def reset_state():
+    global state
+    state = np.array([1+0j, 0+0j])
+    trail.clear()
+    update_visuals()
 
 # -----------------------
 # Controls
@@ -149,12 +150,6 @@ slider(bind=lambda s:(apply_gate(Ry(s.value*np.pi)), setattr(s,'value',0)),
 slider(bind=lambda s:(apply_gate(Rz(s.value*np.pi)), setattr(s,'value',0)),
        min=-0.5,max=0.5,step=0.05,value=0); wtext(text=" Rz<br>")
 
-def reset_state():
-    global state
-    state = np.array([1+0j, 0+0j])
-    tip.clear_trail()
-    update_visuals()
-
 # Initialize
 update_visuals()
 
@@ -164,8 +159,6 @@ update_visuals()
 while True:
     rate(60)
     update_trail()
-
     for lbl in state_labels:  # billboard effect
         lbl.align = "center"
         lbl.up = scene.forward
-        
